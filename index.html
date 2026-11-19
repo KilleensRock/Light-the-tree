@@ -95,6 +95,7 @@
   .switch .btn{margin-top:14px;padding:12px 22px;font-size:.72rem}
   .extra .xl{opacity:0;transition:opacity .45s ease}
   .stage.lit .extra .xl{opacity:1}
+  .stage.lit svg.tree{filter:drop-shadow(0 0 18px rgba(255,200,120,.25))}
   .swagLights{transition:opacity 1.4s ease}
   .stage:not(.lit) .swagLights{opacity:.25}
   .stage:not(.lit) .twinkle{animation:none}
@@ -343,8 +344,14 @@ function drawTree(){
   const xcols=["#ff5a6e","#ffd36a","#7dffb0","#7ab8ff","#ff9ad5","#fff3d0"];
   let rnd=7; const R=()=>(rnd=(rnd*16807)%2147483647)/2147483647;
   g+=`<g class="extra">`;
-  for(let i=0;i<150;i++){const y=118+R()*545, hw=(y-80)/580*282*.92, x=300+(R()*2-1)*hw, col=xcols[i%6], dl=((660-y)/540*1.9).toFixed(2), tw=(R()*2.4).toFixed(2);
+  for(let i=0;i<340;i++){const y=118+R()*545, hw=(y-80)/580*282*.92, x=300+(R()*2-1)*hw, col=xcols[i%6], dl=((660-y)/540*1.9).toFixed(2), tw=(R()*2.4).toFixed(2);
     g+=`<g class="xl" style="transition-delay:${dl}s"><g class="twinkle" style="animation-delay:${tw}s;animation-duration:${(1.6+R()*1.6).toFixed(2)}s"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="7" fill="${col}" opacity=".45" filter="url(#soft)"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.4" fill="${col}"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1" fill="#fff"/></g></g>`}
+  // extra light strands that only come on at the switch-on
+  [[132,40],[218,94],[306,142],[404,190],[510,236],[612,272]].forEach(([y,hw],k)=>{
+    const x0=300-hw,x1=300+hw,cy=y+34,n=Math.round(hw/9);
+    for(let i=0;i<=n;i++){const t=i/n,x=(1-t)*(1-t)*x0+2*(1-t)*t*300+t*t*x1,yy=(1-t)*(1-t)*y+2*(1-t)*t*cy+t*t*y,col=xcols[(i+k)%6],dl=((660-yy)/540*1.9).toFixed(2);
+      g+=`<g class="xl" style="transition-delay:${dl}s"><g class="twinkle" style="animation-delay:${((i*13+k*7)%20)/10}s;animation-duration:2s"><circle cx="${x.toFixed(1)}" cy="${yy.toFixed(1)}" r="8" fill="${col}" opacity=".5" filter="url(#soft)"/><circle cx="${x.toFixed(1)}" cy="${yy.toFixed(1)}" r="2.8" fill="${col}"/><circle cx="${x.toFixed(1)}" cy="${yy.toFixed(1)}" r="1.1" fill="#fff"/></g></g>`}
+  });
   g+=`</g>`;
   // elf Ciara + switch
   const photo=document.querySelector('.host img').src;
